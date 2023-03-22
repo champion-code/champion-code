@@ -17,9 +17,14 @@ Here are some ideas to get you started:
 <h3 align="center">A developer from guangzhou.china <img src="https://visitor-badge.laobi.icu/badge?page_id=simsq" alt="sunqiang" /></h3>
 <p align="center"> <img src="https://github-profile-trophy.vercel.app/?username=champion-code&title=Stars,Followers,Repositories,Commit,Issues,PullRequest" alt="simsq" /></p>
 
+<img align="right" src="https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs)" alt="simsq" />
+
+-  A testing and development engineer.
+-  With experience in Python.
+-  Primary area of expertise is in game server testing, performance tuning, and in-depth functional testing.
 - 🐧 微信： **843607713**
 - 📫 邮箱： **843607713@qq.com**
--
+
  **My Skills**  
 ![](https://img.shields.io/badge/-Python-3e74a2?style=flat-square&logo=Python&logoColor=fff)
 ![](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=Docker&logoColor=fff)
@@ -29,9 +34,6 @@ Here are some ideas to get you started:
 ![](https://img.shields.io/badge/-LoadTest-FF7ACC?style=flat-square&logo=LoadTest&logoColor=fff)
 ![](https://img.shields.io/badge/-TestRobot-7A00CC?style=flat-square&logo=TestRobot&logoColor=fff)
 
-<p align="right">
-<img src="https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs)" alt="simsq" />
-</p>
 
 
 
