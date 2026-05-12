@@ -11,24 +11,35 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-
       - uses: Platane/snk@v3
+        id: snake
         with:
           github_user_name: champion-code
           outputs: |
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
+      - uses: actions/checkout@v4
+        with:
+          ref: output
+          path: output-branch
+        continue-on-error: true
+
       - name: Push to output branch
         run: |
+          if [ ! -d output-branch/.git ]; then
+            mkdir -p output-branch
+            cd output-branch
+            git init
+            git checkout --orphan output
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          else
+            cd output-branch
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin output:output 2>/dev/null && git checkout output || {
-            git checkout --orphan output
-            git rm -rf . 2>/dev/null || true
-          }
-          cp -f ${{ github.workspace }}/dist/*.svg .
-          git add *.svg
+          cp -f $GITHUB_WORKSPACE/dist/github-contribution-grid-snake.svg .
+          cp -f $GITHUB_WORKSPACE/dist/github-contribution-grid-snake-dark.svg .
+          git add github-contribution-grid-snake.svg github-contribution-grid-snake-dark.svg
           git diff --cached --quiet || git commit -m "Update snake animation"
-          git push origin output
+          git push origin HEAD:output

@@ -12,22 +12,28 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: output
+          path: output-branch
+        continue-on-error: true
 
       - name: Setup output branch
         run: |
-          git fetch origin output:output 2>/dev/null && git checkout output || {
+          if [ ! -d output-branch/.git ]; then
+            mkdir -p output-branch
+            cd output-branch
+            git init
             git checkout --orphan output
-            git rm -rf . 2>/dev/null || true
-            git commit --allow-empty -m "Init output branch"
-          }
-
-      - name: Create output directory
-        run: mkdir -p stats
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          else
+            cd output-branch
+          fi
+          mkdir -p stats
 
       - name: Download Stats Card
         run: |
           for i in 1 2 3; do
-            curl -sf -o stats/stats.svg \
+            curl -sf -o output-branch/stats/stats.svg \
               "https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs" \
               && break || sleep 30
           done
@@ -35,15 +41,16 @@ jobs:
       - name: Download Top Languages Card
         run: |
           for i in 1 2 3; do
-            curl -sf -o stats/top-langs.svg \
+            curl -sf -o output-branch/stats/top-langs.svg \
               "https://github-readme-stats.vercel.app/api/top-langs/?username=champion-code&layout=compact&theme=tokyonight" \
               && break || sleep 30
           done
 
       - name: Commit and push
         run: |
+          cd output-branch
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add stats/
           git diff --cached --quiet || git commit -m "Update cached stats cards"
-          git push origin output
+          git push origin HEAD:output
