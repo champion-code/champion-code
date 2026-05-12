@@ -1,4 +1,4 @@
-name: Cache GitHub Stats Cards
+name: Generate GitHub Stats
 
 on:
   schedule:
@@ -6,77 +6,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  cache-stats:
+  github-metrics:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: lowlighter/metrics@latest
         with:
-          ref: output
-          path: output-branch
-        continue-on-error: true
+          filename: stats/stats.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: champion-code
+          template: classic
+          base: header, activity, community, repositories
+          config_timezone: Asia/Shanghai
+          config_output: svg
+          output_action: commit
+          committer_branch: output
 
-      - name: Setup output branch
-        run: |
-          if [ ! -d output-branch/.git ]; then
-            mkdir -p output-branch
-            cd output-branch
-            git init
-            git checkout --orphan output
-            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          else
-            cd output-branch
-          fi
-          mkdir -p stats
-
-      - name: Download Stats Card
-        run: |
-          success=false
-          for i in 1 2 3 4 5; do
-            echo "Attempt $i: downloading stats card..."
-            if curl -v --max-time 120 -o output-branch/stats/stats.svg \
-              "https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs"; then
-              if [ -s output-branch/stats/stats.svg ]; then
-                echo "Success: stats.svg downloaded ($(wc -c < output-branch/stats/stats.svg) bytes)"
-                success=true
-                break
-              fi
-            fi
-            echo "Failed, retrying in 60s..."
-            sleep 60
-          done
-          if [ "$success" != "true" ]; then
-            echo "::error::Failed to download stats card after 5 attempts"
-            exit 1
-          fi
-
-      - name: Download Top Languages Card
-        run: |
-          success=false
-          for i in 1 2 3 4 5; do
-            echo "Attempt $i: downloading top-langs card..."
-            if curl -v --max-time 120 -o output-branch/stats/top-langs.svg \
-              "https://github-readme-stats.vercel.app/api/top-langs/?username=champion-code&layout=compact&theme=tokyonight"; then
-              if [ -s output-branch/stats/top-langs.svg ]; then
-                echo "Success: top-langs.svg downloaded ($(wc -c < output-branch/stats/top-langs.svg) bytes)"
-                success=true
-                break
-              fi
-            fi
-            echo "Failed, retrying in 60s..."
-            sleep 60
-          done
-          if [ "$success" != "true" ]; then
-            echo "::error::Failed to download top-langs card after 5 attempts"
-            exit 1
-          fi
-
-      - name: Commit and push
-        run: |
-          cd output-branch
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats/
-          git diff --cached --quiet || git commit -m "Update cached stats cards"
-          git push origin HEAD:output
+      - uses: lowlighter/metrics@latest
+        with:
+          filename: stats/top-langs.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: champion-code
+          template: classic
+          base: ""
+          config_timezone: Asia/Shanghai
+          config_output: svg
+          output_action: commit
+          committer_branch: output
+          plugin_languages: yes
+          plugin_languages_sections: most-used
+          plugin_languages_categories: markup, programming
+          plugin_languages_colors: github
+          plugin_languages_limit: 8
