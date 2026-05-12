@@ -17,7 +17,7 @@
 - A testing and development engineer with experience in **Python**
 - Primary expertise in **game server testing**, **performance tuning**, and **in-depth functional testing**
 
-<img align="right" width="400" src="https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs" alt="champion-code's GitHub Stats" />
+<img align="right" width="400" src="https://raw.githubusercontent.com/champion-code/champion-code/output/stats/stats.svg" alt="champion-code's GitHub Stats" />
 
 - Currently focused on building test automation frameworks and tools
 - Passionate about code quality and reliability
@@ -51,7 +51,7 @@
 
 <img height="180" src="https://streak-stats.demolab.com/?user=champion-code&theme=tokyonight" alt="champion-code's Streak Stats" />
 &nbsp;&nbsp;
-<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=champion-code&layout=compact&theme=tokyonight" alt="Top Languages" />
+<img height="180" src="https://raw.githubusercontent.com/champion-code/champion-code/output/stats/top-langs.svg" alt="Top Languages" />
 
 </div>
 

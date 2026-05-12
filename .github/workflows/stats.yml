@@ -1,0 +1,43 @@
+name: Cache GitHub Stats Cards
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  cache-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: output
+
+      - name: Create output directory
+        run: mkdir -p stats
+
+      - name: Download Stats Card
+        run: |
+          for i in 1 2 3; do
+            curl -sf -o stats/stats.svg \
+              "https://github-readme-stats.vercel.app/api?username=champion-code&show_icons=true&theme=tokyonight&hide=prs,contribs" \
+              && break || sleep 30
+          done
+
+      - name: Download Top Languages Card
+        run: |
+          for i in 1 2 3; do
+            curl -sf -o stats/top-langs.svg \
+              "https://github-readme-stats.vercel.app/api/top-langs/?username=champion-code&layout=compact&theme=tokyonight" \
+              && break || sleep 30
+          done
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stats/
+          git diff --cached --quiet || git commit -m "Update cached stats cards"
+          git push
